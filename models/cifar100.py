@@ -6,8 +6,8 @@ from PIL import Image
 from fastapi import APIRouter, UploadFile, HTTPException, File
 from torchvision.datasets import CIFAR100
 
-# dataset = CIFAR100(root='./data', train=True, download=True)
-# classes = dataset.classes
+dataset = CIFAR100(root='./data', train=True, download=True)
+classes = dataset.classes
 
 
 
