@@ -67,7 +67,8 @@ async def predict(file: UploadFile = File(...)):
         with torch.no_grad():
             y_pred = model(image_tensor)
             prediction = y_pred.argmax(dim=1).item()
+            confidence = torch.softmax(y_pred, dim=1)[0, prediction].item()
 
-        return {'prediction': classes.get(prediction)}
+        return {'prediction': classes.get(prediction), 'confidence': round(confidence, 4)}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

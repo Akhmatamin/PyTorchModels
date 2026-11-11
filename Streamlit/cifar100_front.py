@@ -1,29 +1,24 @@
-import streamlit as st
-import requests
+from ui import prediction_page
 
-
-st.title('CIFAR 100')
-
-st.markdown('''Upload image!''')
-st.markdown(':orange-badge[File must be .png | .jpg | .jpeg format!]')
-file = st.file_uploader('Choose file:', type=["jpg", "jpeg", "png"])
-if file is not None:
-    st.image(file, caption='Uploaded file',width=200)
-    files = {
-        'file': (file.name,file.getvalue(), file.type)
-    }
-
-if st.button('Check the photo'):
-    if file is None:
-        st.warning('Please upload a file')
-        st.stop()
-    try:
-        response = requests.post('http://127.0.0.1:8000/cifar100/predict/', files=files)
-        if response.status_code == 200:
-            prediction = response.json()
-            st.success(f"Answer: {prediction.get('prediction')}")
-        else:
-            st.error(f"Server response: {response.status_code}")
-    except requests.exceptions.RequestException:
-        st.error("No connection!")
-
+prediction_page(
+    title='CIFAR-100',
+    emoji='🎨',
+    description='Upload a photo and the model will pick one of 100 fine-grained classes — animals, plants, vehicles, objects and more.',
+    endpoint='cifar100',
+    classes=[
+        'apple', 'aquarium_fish', 'baby', 'bear', 'beaver', 'bed', 'bee', 'beetle', 'bicycle', 'bottle',
+        'bowl', 'boy', 'bridge', 'bus', 'butterfly', 'camel', 'can', 'castle', 'caterpillar', 'cattle',
+        'chair', 'chimpanzee', 'clock', 'cloud', 'cockroach', 'couch', 'crab', 'crocodile', 'cup', 'dinosaur',
+        'dolphin', 'elephant', 'flatfish', 'forest', 'fox', 'girl', 'hamster', 'house', 'kangaroo', 'keyboard',
+        'lamp', 'lawn_mower', 'leopard', 'lion', 'lizard', 'lobster', 'man', 'maple_tree', 'motorcycle', 'mountain',
+        'mouse', 'mushroom', 'oak_tree', 'orange', 'orchid', 'otter', 'palm_tree', 'pear', 'pickup_truck', 'pine_tree',
+        'plain', 'plate', 'poppy', 'porcupine', 'possum', 'rabbit', 'raccoon', 'ray', 'road', 'rocket',
+        'rose', 'sea', 'seal', 'shark', 'shrew', 'skunk', 'skyscraper', 'snail', 'snake', 'spider',
+        'squirrel', 'streetcar', 'sunflower', 'sweet_pepper', 'table', 'tank', 'telephone', 'television', 'tiger', 'tractor',
+        'train', 'trout', 'tulip', 'turtle', 'wardrobe', 'whale', 'willow_tree', 'wolf', 'woman', 'worm',
+    ],
+    tips=[
+        'One main object per photo works best.',
+        'Images are shrunk to 32×32 pixels, so keep the object large and centered.',
+    ],
+)
